@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Rút Lì Xì Tết 2025</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>🧧 RÚT LÌ XÌ MAY MẮN 🧧</h1>
+
+  <!-- VÒNG QUAY -->
+  <div class="circle" id="circle"></div>
+
+  <!-- NÚT ĐIỀU KHIỂN -->
+  <div>
+    <button id="spinBtn">🎯 QUAY</button>
+    <button id="settingBtn">⚙️ CÀI ĐẶT</button>
+  </div>
+
+  <!-- KẾT QUẢ -->
+  <div id="result" class="result"></div>
+
+  <!-- MODAL CÀI ĐẶT -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2>⚙️ CÀI ĐẶT PHẦN QUÀ</h2>
+
+      <table id="prizeTable">
+        <tr>
+          <th>Tên quà</th>
+          <th>Số lượng</th>
+          <th>Tỷ lệ (%)</th>
+          <th></th>
+        </tr>
+      </table>
+
+      <br>
+      <button id="addPrize">➕ Thêm quà</button>
+      <br><br>
+      <button onclick="closeModal()">✅ LƯU & ĐÓNG</button>
+    </div>
+  </div>
+
+  <!-- NHẠC -->
+  <audio id="music" src="music.mp3" preload="auto"></audio>
+
+  <!-- SCRIPT -->
+  <script src="script.js"></script>
+
+</body>
+</html>
