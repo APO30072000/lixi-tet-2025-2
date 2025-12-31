@@ -23,11 +23,12 @@ h1 {
 /* bao lì xì */
 .lixi {
   position: absolute;
-  width: 100px;
-  height: 140px;
+  width: 80px;
+  height: 120px;
   background: url("lixi.jpg") no-repeat center / cover;
   pointer-events: none;
   transform-origin: center center;
+  transition: transform 0.5s;
 }
 
 /* nút quay */
@@ -40,6 +41,7 @@ button {
   background: gold;
   color: #b30000;
   font-weight: bold;
+  margin: 5px;
 }
 
 button:hover {
@@ -53,43 +55,55 @@ button:hover {
   color: yellow;
   text-shadow: 1px 1px 3px black;
 }
-/* =========================
-   MODAL SETTING (KHÔNG PHÁ GIAO DIỆN QUAY)
-   ========================= */
+
+/* modal */
 .modal {
   display: none;
   position: fixed;
-  top: 0;
+  z-index: 100;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.6);
-  z-index: 9999;           /* QUAN TRỌNG */
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
 }
 
 .modal-content {
-  background: #fff;
+  background-color: #fff;
   color: #000;
-  width: 420px;
-  max-width: 90%;
-  margin: 80px auto;
+  margin: 100px auto;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 10px;
+  width: 500px;
   text-align: center;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
 }
 
-.modal table {
+.modal-content input {
+  width: 100px;
+}
+
+/* BẢNG QUÀ GÓC PHẢI */
+#prizeDisplay {
+  position: fixed;
+  top: 50px;
+  right: 20px;
+  width: 220px;
+  background: rgba(0,0,0,0.6);
+  padding: 15px;
+  border-radius: 12px;
+  color: white;
+  text-align: center;
+  z-index: 99;
+}
+
+#prizeDisplay table {
   width: 100%;
   border-collapse: collapse;
+  color: white;
 }
 
-.modal th,
-.modal td {
-  border: 1px solid #ccc;
-  padding: 6px;
-}
-
-.modal input {
-  width: 90%;
+#prizeDisplay th, #prizeDisplay td {
+  padding: 5px;
+  font-size: 14px;
 }

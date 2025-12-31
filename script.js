@@ -42,47 +42,49 @@ const RADIUS = 190;
 /* =======================
    TẠO LÌ XÌ CÁNH QUẠT
 ======================= */
-circle.innerHTML = "";
-for (let i = 0; i < LIXI_COUNT; i++) {
-  const li = document.createElement("div");
-  li.className = "lixi";
+function renderCircle() {
+  circle.innerHTML = "";
+  for (let i = 0; i < LIXI_COUNT; i++) {
+    const li = document.createElement("div");
+    li.className = "lixi";
 
-  const angle = (2 * Math.PI / LIXI_COUNT) * i;
-  const x = RADIUS * Math.cos(angle);
-  const y = RADIUS * Math.sin(angle);
-  const rotateDeg = angle * 180 / Math.PI + 90;
+    const angle = (2 * Math.PI / LIXI_COUNT) * i;
+    const x = RADIUS * Math.cos(angle);
+    const y = RADIUS * Math.sin(angle);
+    const rotateDeg = angle * 180 / Math.PI + 90;
 
-  li.style.left = "50%";
-  li.style.top = "50%";
-  li.style.transform = `
-    translate(-50%, -50%)
-    translate(${x}px, ${y}px)
-    rotate(${rotateDeg}deg)
-  `;
-
-  circle.appendChild(li);
+    li.style.left = "50%";
+    li.style.top = "50%";
+    li.style.transform = `
+      translate(-50%, -50%)
+      translate(${x}px, ${y}px)
+      rotate(${rotateDeg}deg)
+    `;
+    circle.appendChild(li);
+  }
 }
+renderCircle();
 
 /* =======================
-   TỔNG SỐ LƯỢNG
+   TOTAL QTY
 ======================= */
 function totalQty() {
   return prizes.reduce((s, p) => s + Math.max(0, p.qty), 0);
 }
 
 /* =======================
-   RANDOM THEO QTY
+   DRAW PRIZE RANDOM
 ======================= */
 function drawPrize() {
   const total = totalQty();
   if (total <= 0) return null;
 
   let r = Math.random() * total;
-
   for (let p of prizes) {
     if (r < p.qty) {
-      p.qty--;
-      savePrizes(); // ⭐ lưu lại sau khi trúng
+      p.qty--;                  // tự động -1
+      savePrizes();             // lưu lại
+      renderPrizeDisplay();     // cập nhật bảng trực tiếp
       return p.name;
     }
     r -= p.qty;
@@ -90,7 +92,7 @@ function drawPrize() {
 }
 
 /* =======================
-   QUAY
+   SPIN BUTTON
 ======================= */
 btn.onclick = () => {
   if (totalQty() <= 0) {
@@ -106,21 +108,18 @@ btn.onclick = () => {
   circle.style.transform = "rotate(0deg)";
 
   setTimeout(() => {
-    circle.style.transition =
-      "transform 7s cubic-bezier(.15,.75,.25,1)";
-    circle.style.transform =
-      `rotate(${1800 + Math.random() * 360}deg)`;
+    circle.style.transition = "transform 7s cubic-bezier(.15,.75,.25,1)";
+    circle.style.transform = `rotate(${1800 + Math.random() * 360}deg)`;
   }, 50);
 
   setTimeout(() => {
     const prize = drawPrize();
     result.innerHTML = `🎉 Bạn nhận được: <b>${prize}</b> 🎉`;
-    renderPrizeTable();
-  }, 7000);
+  }, 7050);
 };
 
 /* =======================
-   SETTING UI
+   SETTINGS MODAL
 ======================= */
 settingBtn.onclick = () => {
   modal.style.display = "block";
@@ -133,7 +132,7 @@ function closeModal() {
 }
 
 /* =======================
-   RENDER BẢNG QUÀ
+   RENDER TABLE TRONG MODAL
 ======================= */
 function renderPrizeTable() {
   prizeTable.innerHTML = `
@@ -146,19 +145,16 @@ function renderPrizeTable() {
   `;
 
   const total = totalQty();
-
   prizes.forEach((p, i) => {
     const rate = total ? ((p.qty / total) * 100).toFixed(1) : 0;
-
     const row = prizeTable.insertRow();
     row.innerHTML = `
       <td>
-        <input value="${p.name}"
-          onchange="prizes[${i}].name=this.value; savePrizes();">
+        <input value="${p.name}" onchange="prizes[${i}].name=this.value; savePrizes(); renderPrizeDisplay();">
       </td>
       <td>
         <input type="number" min="0" value="${p.qty}"
-          onchange="prizes[${i}].qty=+this.value; savePrizes(); renderPrizeTable();">
+          onchange="prizes[${i}].qty=+this.value; savePrizes(); renderPrizeTable(); renderPrizeDisplay();">
       </td>
       <td>${rate}%</td>
       <td>
@@ -166,19 +162,50 @@ function renderPrizeTable() {
       </td>
     `;
   });
+
+  renderPrizeDisplay();
 }
 
 /* =======================
-   XÓA / THÊM QUÀ
+   RENDER BẢNG HIỂN THỊ TRỰC TIẾP
+======================= */
+function renderPrizeDisplay() {
+  const table = document.getElementById("prizeTableDisplay");
+  table.innerHTML = `
+    <tr>
+      <th>Tên quà</th>
+      <th>Số lượng</th>
+      <th>Tỷ lệ (%)</th>
+    </tr>
+  `;
+  const total = totalQty();
+  prizes.forEach(p => {
+    const rate = total ? ((p.qty / total) * 100).toFixed(1) : 0;
+    const row = table.insertRow();
+    row.innerHTML = `
+      <td>${p.name}</td>
+      <td>${p.qty}</td>
+      <td>${rate}%</td>
+    `;
+  });
+}
+
+/* =======================
+   ADD / REMOVE QUÀ
 ======================= */
 function removePrize(i) {
   prizes.splice(i, 1);
   savePrizes();
   renderPrizeTable();
+  renderPrizeDisplay();
 }
 
 addPrizeBtn.onclick = () => {
   prizes.push({ name: "Phần quà mới", qty: 1 });
   savePrizes();
   renderPrizeTable();
-};
+  renderPrizeDisplay();
+}
+
+// Gọi render lần đầu
+renderPrizeDisplay();
