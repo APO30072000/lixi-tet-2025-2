@@ -112,10 +112,36 @@ btn.onclick = () => {
     circle.style.transform = `rotate(${1800 + Math.random() * 360}deg)`;
   }, 50);
 
+  btn.onclick = () => {
+  if (totalQty() <= 0) {
+    result.innerHTML = "🎊 ĐÃ HẾT PHẦN QUÀ 🎊";
+    return;
+  }
+
+  btn.disabled = true; // chặn spam click
+  result.innerHTML = "";
+
+  music.currentTime = 0;
+  music.play();
+
+  circle.style.transition = "none";
+  circle.style.transform = "rotate(0deg)";
+
   setTimeout(() => {
-    const prize = drawPrize();
-    result.innerHTML = `🎉 Bạn nhận được: <b>${prize}</b> 🎉`;
-  }, 30050);
+    circle.style.transition = "transform 30s cubic-bezier(.15,.75,.25,1)";
+    circle.style.transform = `rotate(${1800 + Math.random() * 360}deg)`;
+  }, 50);
+
+  // ✅ CHỜ QUAY DỪNG HẲN
+  circle.addEventListener("transitionend", onSpinEnd, { once: true });
+};
+
+function onSpinEnd() {
+  const prize = drawPrize();
+  result.innerHTML = `🎉 Bạn nhận được: <b>${prize}</b> 🎉`;
+  btn.disabled = false;
+}
+
 };
 
 /* =======================
@@ -209,5 +235,6 @@ addPrizeBtn.onclick = () => {
 
 // Gọi render lần đầu
 renderPrizeDisplay();
+
 
 
