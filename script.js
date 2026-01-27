@@ -6,19 +6,15 @@ let prizes = [
 ];
 
 /* =======================
-   SAVE / LOAD LOCALSTORAGE
+   SAVE / LOAD
 ======================= */
 function savePrizes() {
   localStorage.setItem("lixi_prizes", JSON.stringify(prizes));
 }
-
 function loadPrizes() {
   const data = localStorage.getItem("lixi_prizes");
-  if (data) {
-    prizes = JSON.parse(data);
-  }
+  if (data) prizes = JSON.parse(data);
 }
-
 loadPrizes();
 
 /* =======================
@@ -28,19 +24,18 @@ const circle = document.getElementById("circle");
 const result = document.getElementById("result");
 const music = document.getElementById("music");
 const btn = document.getElementById("spinBtn");
-const settingBtn = document.getElementById("settingBtn");
-const modal = document.getElementById("modal");
-const prizeTable = document.getElementById("prizeTable");
-const addPrizeBtn = document.getElementById("addPrize");
 
 /* =======================
    CONFIG
 ======================= */
 const LIXI_COUNT = 12;
 const RADIUS = 190;
+const SPIN_TIME = 30; // 🔥 30 GIÂY
+
+let spinning = false;
 
 /* =======================
-   TẠO LÌ XÌ CÁNH QUẠT
+   RENDER LÌ XÌ
 ======================= */
 function renderCircle() {
   circle.innerHTML = "";
@@ -73,7 +68,7 @@ function totalQty() {
 }
 
 /* =======================
-   DRAW PRIZE RANDOM
+   DRAW PRIZE
 ======================= */
 function drawPrize() {
   const total = totalQty();
@@ -82,9 +77,9 @@ function drawPrize() {
   let r = Math.random() * total;
   for (let p of prizes) {
     if (r < p.qty) {
-      p.qty--;                  // tự động -1
-      savePrizes();             // lưu lại
-      renderPrizeDisplay();     // cập nhật bảng trực tiếp
+      p.qty--;
+      savePrizes();
+      renderPrizeDisplay();
       return p.name;
     }
     r -= p.qty;
@@ -92,72 +87,46 @@ function drawPrize() {
 }
 
 /* =======================
-   SPIN BUTTON
+   SPIN
 ======================= */
-setTimeout(() => {
-  const prize = drawPrize();
-  result.innerHTML = `🎉 Bạn nhận được: <b>${prize}</b> 🎉`;
-}, 40050);
+btn.onclick = () => {
+  if (spinning) return;
+  if (totalQty() <= 0) {
+    result.innerHTML = "🎊 ĐÃ HẾT PHẦN QUÀ 🎊";
+    return;
+  }
 
+  spinning = true;
+  result.innerHTML = "";
 
-function onSpinEnd() {
-  const prize = drawPrize();
-  result.innerHTML = `🎉 Bạn nhận được: <b>${prize}</b> 🎉`;
-  btn.disabled = false;
-}
+  music.currentTime = 0;
+  music.play();
 
+  circle.style.transition = "none";
+  circle.style.transform = "rotate(0deg)";
+
+  // force reflow
+  circle.offsetHeight;
+
+  const rotateDeg = 3000 + Math.random() * 360;
+
+  circle.style.transition = `transform ${SPIN_TIME}s cubic-bezier(.15,.75,.25,1)`;
+  circle.style.transform = `rotate(${rotateDeg}deg)`;
 };
 
 /* =======================
-   SETTINGS MODAL
+   KHI VÒNG QUAY DỪNG
 ======================= */
-settingBtn.onclick = () => {
-  modal.style.display = "block";
-  renderPrizeTable();
-};
+circle.addEventListener("transitionend", () => {
+  if (!spinning) return;
 
-function closeModal() {
-  savePrizes();
-  modal.style.display = "none";
-}
+  spinning = false;
+  const prize = drawPrize();
+  result.innerHTML = `🎉 Bạn nhận được: <b>${prize}</b> 🎉`;
+});
 
 /* =======================
-   RENDER TABLE TRONG MODAL
-======================= */
-function renderPrizeTable() {
-  prizeTable.innerHTML = `
-    <tr>
-      <th>Tên quà</th>
-      <th>Số lượng</th>
-      <th>Tỷ lệ (%)</th>
-      <th></th>
-    </tr>
-  `;
-
-  const total = totalQty();
-  prizes.forEach((p, i) => {
-    const rate = total ? ((p.qty / total) * 100).toFixed(1) : 0;
-    const row = prizeTable.insertRow();
-    row.innerHTML = `
-      <td>
-        <input value="${p.name}" onchange="prizes[${i}].name=this.value; savePrizes(); renderPrizeDisplay();">
-      </td>
-      <td>
-        <input type="number" min="0" value="${p.qty}"
-          onchange="prizes[${i}].qty=+this.value; savePrizes(); renderPrizeTable(); renderPrizeDisplay();">
-      </td>
-      <td>${rate}%</td>
-      <td>
-        <button onclick="removePrize(${i})">❌</button>
-      </td>
-    `;
-  });
-
-  renderPrizeDisplay();
-}
-
-/* =======================
-   RENDER BẢNG HIỂN THỊ TRỰC TIẾP
+   HIỂN THỊ BẢNG QUÀ
 ======================= */
 function renderPrizeDisplay() {
   const table = document.getElementById("prizeTableDisplay");
@@ -168,6 +137,7 @@ function renderPrizeDisplay() {
       <th>Tỷ lệ (%)</th>
     </tr>
   `;
+
   const total = totalQty();
   prizes.forEach(p => {
     const rate = total ? ((p.qty / total) * 100).toFixed(1) : 0;
@@ -180,25 +150,4 @@ function renderPrizeDisplay() {
   });
 }
 
-/* =======================
-   ADD / REMOVE QUÀ
-======================= */
-function removePrize(i) {
-  prizes.splice(i, 1);
-  savePrizes();
-  renderPrizeTable();
-  renderPrizeDisplay();
-}
-
-addPrizeBtn.onclick = () => {
-  prizes.push({ name: "Phần quà mới", qty: 1 });
-  savePrizes();
-  renderPrizeTable();
-  renderPrizeDisplay();
-}
-
-// Gọi render lần đầu
 renderPrizeDisplay();
-
-
-
