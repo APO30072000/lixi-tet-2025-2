@@ -108,7 +108,7 @@ btn.onclick = () => {
   circle.style.transform = "rotate(0deg)";
 
   setTimeout(() => {
-    circle.style.transition = "transform 7s cubic-bezier(.15,.75,.25,1)";
+    circle.style.transition = "transform 30s cubic-bezier(.15,.75,.25,1)";
     circle.style.transform = `rotate(${1800 + Math.random() * 360}deg)`;
   }, 50);
 
@@ -209,3 +209,4 @@ addPrizeBtn.onclick = () => {
 
 // Gọi render lần đầu
 renderPrizeDisplay();
+
