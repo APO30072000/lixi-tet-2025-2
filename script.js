@@ -115,7 +115,7 @@ btn.onclick = () => {
   setTimeout(() => {
     const prize = drawPrize();
     result.innerHTML = `🎉 Bạn nhận được: <b>${prize}</b> 🎉`;
-  }, 7050);
+  }, 30050);
 };
 
 /* =======================
@@ -209,4 +209,5 @@ addPrizeBtn.onclick = () => {
 
 // Gọi render lần đầu
 renderPrizeDisplay();
+
 
