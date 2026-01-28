@@ -1,3 +1,6 @@
+/* =======================
+   DATA
+======================= */
 let prizes = [
   { name: "10.000đ", qty: 10 },
   { name: "20.000đ", qty: 6 },
@@ -23,14 +26,17 @@ loadPrizes();
 const circle = document.getElementById("circle");
 const result = document.getElementById("result");
 const music = document.getElementById("music");
-const btn = document.getElementById("spinBtn");
+const spinBtn = document.getElementById("spinBtn");
+const settingBtn = document.getElementById("settingBtn");
+const modal = document.getElementById("modal");
+const prizeTable = document.getElementById("prizeTable");
 
 /* =======================
    CONFIG
 ======================= */
 const LIXI_COUNT = 12;
 const RADIUS = 190;
-const SPIN_TIME = 30; // 🔥 30 GIÂY
+const SPIN_TIME = 30; // 🔥 THỜI GIAN QUAY (GIÂY)
 
 let spinning = false;
 
@@ -68,7 +74,7 @@ function totalQty() {
 }
 
 /* =======================
-   DRAW PRIZE
+   DRAW PRIZE (THEO QTY)
 ======================= */
 function drawPrize() {
   const total = totalQty();
@@ -80,16 +86,18 @@ function drawPrize() {
       p.qty--;
       savePrizes();
       renderPrizeDisplay();
+      renderSettingTable();
       return p.name;
     }
     r -= p.qty;
   }
+  return null;
 }
 
 /* =======================
    SPIN
 ======================= */
-btn.onclick = () => {
+spinBtn.onclick = () => {
   if (spinning) return;
   if (totalQty() <= 0) {
     result.innerHTML = "🎊 ĐÃ HẾT PHẦN QUÀ 🎊";
@@ -104,29 +112,25 @@ btn.onclick = () => {
 
   circle.style.transition = "none";
   circle.style.transform = "rotate(0deg)";
-
-  // force reflow
   circle.offsetHeight;
 
   const rotateDeg = 3000 + Math.random() * 360;
-
   circle.style.transition = `transform ${SPIN_TIME}s cubic-bezier(.15,.75,.25,1)`;
   circle.style.transform = `rotate(${rotateDeg}deg)`;
 };
 
-/* =======================
-   KHI VÒNG QUAY DỪNG
-======================= */
 circle.addEventListener("transitionend", () => {
   if (!spinning) return;
-
   spinning = false;
+
   const prize = drawPrize();
-  result.innerHTML = `🎉 Bạn nhận được: <b>${prize}</b> 🎉`;
+  result.innerHTML = prize
+    ? `🎉 Bạn nhận được: <b>${prize}</b> 🎉`
+    : "😢 Không có phần quà";
 });
 
 /* =======================
-   HIỂN THỊ BẢNG QUÀ
+   HIỂN THỊ BẢNG QUÀ (GÓC PHẢI)
 ======================= */
 function renderPrizeDisplay() {
   const table = document.getElementById("prizeTableDisplay");
@@ -149,5 +153,64 @@ function renderPrizeDisplay() {
     `;
   });
 }
-
 renderPrizeDisplay();
+
+/* =======================
+   MODAL CÀI ĐẶT
+======================= */
+settingBtn.onclick = () => {
+  modal.style.display = "block";
+  renderSettingTable();
+};
+
+function closeModal() {
+  modal.style.display = "none";
+  savePrizes();
+  renderPrizeDisplay();
+}
+
+/* =======================
+   BẢNG CÀI ĐẶT
+======================= */
+function renderSettingTable() {
+  prizeTable.innerHTML = `
+    <tr>
+      <th>Tên quà</th>
+      <th>Số lượng</th>
+      <th></th>
+    </tr>
+  `;
+
+  prizes.forEach((p, i) => {
+    const row = prizeTable.insertRow();
+    row.innerHTML = `
+      <td><input value="${p.name}" onchange="updateName(${i}, this.value)"></td>
+      <td><input type="number" min="0" value="${p.qty}" onchange="updateQty(${i}, this.value)"></td>
+      <td><button onclick="removePrize(${i})">❌</button></td>
+    `;
+  });
+}
+
+/* =======================
+   CRUD
+======================= */
+function updateName(i, v) {
+  prizes[i].name = v;
+  savePrizes();
+}
+function updateQty(i, v) {
+  prizes[i].qty = parseInt(v) || 0;
+  savePrizes();
+  renderPrizeDisplay();
+}
+function removePrize(i) {
+  prizes.splice(i, 1);
+  savePrizes();
+  renderSettingTable();
+  renderPrizeDisplay();
+}
+
+document.getElementById("addPrize").onclick = () => {
+  prizes.push({ name: "Quà mới", qty: 1 });
+  renderSettingTable();
+};
