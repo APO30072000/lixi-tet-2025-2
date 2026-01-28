@@ -2,10 +2,54 @@
    DATA
 ======================= */
 let prizes = [
-  { name: "10.000đ", qty: 10 },
-  { name: "20.000đ", qty: 6 },
-  { name: "50.000đ", qty: 4 },
-  { name: "Chúc bạn may mắn", qty: 10 }
+  { name: "Nguyễn Văn Trãi", qty: 1 },
+  { name: "Bùi Mạnh Thắng", qty: 1 },
+  { name: "Nguyễn Văn Thú", qty: 1 },
+  { name: "Nguyễn Đức Độ", qty: 1 },
+  { name: "Vũ Văn Bình", qty: 1 },
+  { name: "Vũ Văn Hùng", qty: 1 },
+  { name: "Nguyễn Xuân Cư", qty: 1 },
+  { name: "Phạm Gia Hóa", qty: 1 },
+  { name: "Trương Ngọc Thúy", qty: 1 },
+  { name: "Nguyễn Văn Huy", qty: 1 },
+  { name: "Phạm Trung Tuyển", qty: 1 },
+  { name: "Hoàng Văn Huynh", qty: 1 },
+  { name: "Đỗ Đình Công", qty: 1 },
+  { name: "Tây Môn Khánh ", qty: 1 },
+  { name: "Phạm Văn Quang", qty: 1 },
+  { name: "Nguyễn Đình Nhất", qty: 1 },
+  { name: "Phạm Văn Bắc", qty: 1 },
+  { name: "Nguyễn Văn Hải", qty: 1 },
+  { name: "Nguyễn Thị Hà", qty: 1 },
+  { name: "Vũ Thị Hằng", qty: 1 },
+  { name: "Vũ Xuân Hạnh", qty: 1 },
+  { name: "Đào Văn Lượm", qty: 1 },
+  { name: "Hà Duy Hải", qty: 1 },
+  { name: "Đỗ Duy Trưởng", qty: 1 },
+  { name: "Hà Phương Hằng", qty: 1 },
+  { name: "Tô Tài Dũng", qty: 1 },
+  { name: "Nguyễn Đình Mạnh", qty: 1 },
+  { name: "Ngô Chí Hoàn", qty: 1 },
+  { name: "Chu Văn Tuyến", qty: 1 },
+  { name: "Đỗ Văn Cung", qty: 1 },
+  { name: "Nguyễn Quốc Đạt", qty: 1 },
+  { name: "Nguyễn Ngọc Trường", qty: 1 },
+  { name: "Hà Ngọc Quang", qty: 1 },
+  { name: "Đào Văn Nho", qty: 1 },
+  { name: "Hà Văn Ninh", qty: 1 },
+  { name: "Nguyễn Thị Trang", qty: 1 },
+  { name: "Nguyễn Quang Loát", qty: 1 },
+  { name: "Nguyễn Danh Tới", qty: 1 },
+  { name: "Vũ Văn Cường", qty: 1 },
+  { name: "Phạm Thị Vân", qty: 1 },
+  { name: "Lê Huy Sơn", qty: 1 },
+  { name: "Vũ Viết Đại", qty: 1 },
+  { name: "Nguyễn Xuân Tài", qty: 1 },
+  { name: "Nguyễn Thị Hiền", qty: 1 },
+  { name: "Trương Đình Tiến", qty: 1 },
+  { name: "Đặng Văn Ngọc", qty: 1 },
+  { name: "Phạm Thị Thắm", qty: 1 },
+  { name: "Lê Lương An", qty: 1 }
 ];
 
 /* =======================
@@ -214,3 +258,4 @@ document.getElementById("addPrize").onclick = () => {
   prizes.push({ name: "Quà mới", qty: 1 });
   renderSettingTable();
 };
+
