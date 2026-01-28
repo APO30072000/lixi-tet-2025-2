@@ -59,10 +59,19 @@ function savePrizes() {
   localStorage.setItem("lixi_prizes", JSON.stringify(prizes));
 }
 function loadPrizes() {
-  const data = localStorage.getItem("lixi_prizes");
-  if (data) prizes = JSON.parse(data);
+  const saved = localStorage.getItem("prizes");
+
+  if (saved) {
+    return JSON.parse(saved); // đã có data → dùng
+  } else {
+    // lần đầu mở → copy từ mặc định
+    localStorage.setItem("prizes", JSON.stringify(DEFAULT_PRIZES));
+    return JSON.parse(JSON.stringify(DEFAULT_PRIZES));
+  }
 }
-loadPrizes();
+
+let prizes = loadPrizes();
+
 
 /* =======================
    DOM
@@ -258,4 +267,5 @@ document.getElementById("addPrize").onclick = () => {
   prizes.push({ name: "Quà mới", qty: 1 });
   renderSettingTable();
 };
+
 
