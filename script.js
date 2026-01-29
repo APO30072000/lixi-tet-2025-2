@@ -47,6 +47,7 @@ let prizes = [
   { name: "Nguyễn Xuân Tài", qty: 1 },
   { name: "Nguyễn Thị Hiền", qty: 1 },
   { name: "Trương Đình Tiến", qty: 1 },
+  { name: "Phạm Văn Long", qty: 1 },
   { name: "Đặng Văn Ngọc", qty: 1 },
   { name: "Phạm Thị Thắm", qty: 1 },
   { name: "Lê Lương An", qty: 1 }
@@ -286,4 +287,5 @@ document.getElementById("addPrize").onclick = () => {
   prizes.push({ name: "Quà mới", qty: 1 });
   renderSettingTable();
 };
+
 
