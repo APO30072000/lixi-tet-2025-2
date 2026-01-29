@@ -55,9 +55,6 @@ let prizes = [
 /* =======================
    SAVE / LOAD
 ======================= */
-/* =======================
-   SAVE / LOAD
-======================= */
 function savePrizes() {
   localStorage.setItem("lixi_prizes", JSON.stringify(prizes));
 }
@@ -78,13 +75,21 @@ const spinBtn = document.getElementById("spinBtn");
 const settingBtn = document.getElementById("settingBtn");
 const modal = document.getElementById("modal");
 const prizeTable = document.getElementById("prizeTable");
+const spinTimeSelect = document.getElementById("spinTimeSelect");
+const countdown = document.getElementById("countdown");
+
+spinTimeSelect.onchange = () => {
+  SPIN_TIME = parseInt(spinTimeSelect.value);
+};
+
 
 /* =======================
    CONFIG
 ======================= */
 const LIXI_COUNT = 12;
 const RADIUS = 190;
-const SPIN_TIME = 30; // 🔥 THỜI GIAN QUAY (GIÂY)
+let SPIN_TIME = 30; // mặc định
+
 
 let spinning = false;
 
@@ -158,14 +163,33 @@ spinBtn.onclick = () => {
   music.currentTime = 0;
   music.play();
 
+  // RESET VÒNG QUAY
   circle.style.transition = "none";
   circle.style.transform = "rotate(0deg)";
   circle.offsetHeight;
 
+  // ĐẾM NGƯỢC
+  countdown.style.display = "block";
+
+  let timeLeft = SPIN_TIME;
+  countdown.innerHTML = `⏳ ${timeLeft}s`;
+
+  const timer = setInterval(() => {
+    timeLeft--;
+    countdown.innerHTML = `⏳ ${timeLeft}s`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      countdown.style.display = "none";
+    }
+  }, 1000);
+
   const rotateDeg = 3000 + Math.random() * 360;
-  circle.style.transition = `transform ${SPIN_TIME}s cubic-bezier(.15,.75,.25,1)`;
+  circle.style.transition =
+    `transform ${SPIN_TIME}s cubic-bezier(.15,.75,.25,1)`;
   circle.style.transform = `rotate(${rotateDeg}deg)`;
 };
+
 
 circle.addEventListener("transitionend", () => {
   if (!spinning) return;
@@ -173,8 +197,8 @@ circle.addEventListener("transitionend", () => {
 
   const prize = drawPrize();
   result.innerHTML = prize
-    ? `🎉 Bạn nhận được: <b>${prize}</b> 🎉`
-    : "😢 Không có phần quà";
+    ? `🎉 Xin chúc mừng: <b>${prize}</b> 🎉`
+    : "😢 Kết thúc trao quà";
 });
 
 /* =======================
@@ -262,5 +286,4 @@ document.getElementById("addPrize").onclick = () => {
   prizes.push({ name: "Quà mới", qty: 1 });
   renderSettingTable();
 };
-
 
