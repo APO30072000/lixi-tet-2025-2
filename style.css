@@ -3,12 +3,22 @@
 ======================= */
 body {
   margin: 0;
-  background: radial-gradient(circle, #ffdf8b, #c40000);
-  text-align: center;
+  min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
   color: white;
-  overflow: hidden; /* 🔥 CHỐT: không cho trang bị dài */
+  text-align: center;
+
+  /* ẢNH NỀN */
+  background:
+    linear-gradient(
+      rgba(0,0,0,0.35),
+      rgba(0,0,0,0.35)
+    ),
+    url("backgroud.jpg") no-repeat center center fixed;
+
+  background-size: cover;
 }
+
 
 /* =======================
    TITLE
