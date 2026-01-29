@@ -167,3 +167,37 @@ button:hover {
   background: gold;
   border-radius: 10px;
 }
+#controlPanel {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  align-items: center;
+  font-size: 20px;
+}
+
+#spinTimeSelect {
+  font-size: 18px;
+  padding: 5px 10px;
+  border-radius: 8px;
+}
+
+#countdown {
+  position: fixed;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  font-size: 150px;          /* TO */
+  font-weight: bold;
+  color: #fffbfb;           /* đỏ nổi */
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.4);
+
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px 30px;
+  border-radius: 16px;
+
+  z-index: 9999;
+  display: none;            /* bình thường ẩn */
+}
+
